@@ -9,7 +9,7 @@ public class loadRegistry implements EventListener {
     public void loadRegistry() {
         long startTimeModuleCommandManager = System.currentTimeMillis();
         try {
-            Registry.load();
+            Registry.load(false, true, "");
             generic.logMessage("Registry Manager -> " + (System.currentTimeMillis () - startTimeModuleCommandManager) + "ms -> OK");
         } catch (Exception ex) {
             generic.logMessage("Registry Manager -> ERROR");

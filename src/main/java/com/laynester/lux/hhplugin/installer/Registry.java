@@ -1,6 +1,7 @@
 package com.laynester.lux.hhplugin.installer;
 
 import com.eu.habbo.Emulator;
+import com.laynester.lux.hhcore.log.debug;
 import com.laynester.lux.hhcore.log.generic;
 
 import java.sql.Connection;
@@ -11,13 +12,31 @@ import java.sql.Statement;
 import static com.laynester.lux.Lux.pluginName;
 
 public class Registry {
+    public static boolean catchSpecialException(String version, boolean repairMode, String module, Exception e) {
+        if (!repairMode) {
+            System.out.println("              -> " + module + " -> ERROR");
+            System.out.println("              EXCEPTION STACKTRACE -> " + e.getMessage());
+            return false;
+        }
+        debug.logDebug("Install", "Verification check returned: " + e.getMessage());
+        if (e.getMessage().contains("Duplicate column name")) {
+            System.out.println("              -> " + module + " -> OK");
+        }
+        System.out.println("              -> " + module + " -> UNKNOWN");
+        return true;
+    }
 
-    public static void install(String version) throws Exception {
+    public static void install(String version, boolean repairMode, boolean automaticNext) throws Exception {
         boolean reloadPermissions = false;
         boolean installSuccess = true;
         int errors = 0;
         long startTime = System.currentTimeMillis ();
-        generic.logInstall("Starting to install " + pluginName + " version " + version + ":");
+
+        if (repairMode) {
+            generic.logInstall("Verifying installation for " + pluginName + " version " + version + ":");
+        } else {
+            generic.logInstall("Starting to install " + pluginName + " version " + version + ":");
+        }
 
         // Installer V1.0.0
         if (version.equalsIgnoreCase("1.0.0")) {
@@ -26,9 +45,7 @@ public class Registry {
                 statement.execute("CREATE TABLE IF NOT EXISTS `lux_logins` ( `id` int(11) unsigned NOT NULL AUTO_INCREMENT, `user_id` int(11) NOT NULL, `timestamp` int(30) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
                 System.out.println("              -> Creating table `lux_logins` -> OK");
             } catch (SQLException e) {
-                System.out.println("              -> Creating table `lux_logins` -> ERROR");
-                System.out.println("              EXCEPTION STACKTRACE -> " + e.getMessage());
-                installSuccess = false;
+                installSuccess = catchSpecialException(version, repairMode, "Creating table `lux_logins`", e);
                 errors++;
             }
 
@@ -37,9 +54,7 @@ public class Registry {
                 statement.execute("ALTER TABLE  `rooms` ADD  `is_casino` ENUM('0','1') NOT NULL DEFAULT  '0'");
                 System.out.println("              -> Altering table `rooms` -> OK");
             } catch (SQLException e) {
-                System.out.println("              -> Altering table `rooms` -> ERROR");
-                System.out.println("              EXCEPTION STACKTRACE -> " + e.getMessage());
-                installSuccess = false;
+                installSuccess = catchSpecialException(version, repairMode, "Altering table `rooms`", e);
                 errors++;
             }
 
@@ -203,9 +218,7 @@ public class Registry {
                 statement.execute("ALTER TABLE  `rooms` ADD  `is_frozen` ENUM('0','1') NOT NULL DEFAULT  '0'");
                 System.out.println("              -> Altering table `rooms` -> OK");
             } catch (SQLException e) {
-                System.out.println("              -> Altering table `rooms` -> ERROR");
-                System.out.println("              EXCEPTION STACKTRACE -> " + e.getMessage());
-                installSuccess = false;
+                installSuccess = catchSpecialException(version, repairMode, "Altering table `rooms`", e);
                 errors++;
             }
             Emulator.getTexts().register("commands.description.cmd_freezeroom", ":freezeroom");
@@ -222,32 +235,47 @@ public class Registry {
             System.out.println("              -> Updating various variables -> OK");
         }
 
-        if (installSuccess) {
-            generic.logInstall("Installed " + pluginName + " version " + version + " in " + (System.currentTimeMillis () - startTime) + "ms\n\n");
+        if (repairMode) {
+            generic.logInstall("Reverified " + pluginName + " version " + version + " in " + (System.currentTimeMillis () - startTime) + "ms\n\n");
         } else {
-            generic.logInstall("ERROR IN INSTALLATION: " + errors + " error(s) when trying to install " + pluginName + " version " + version + "!");
-            generic.logInstall("Installation will continue as no critical errors were detected\n\n");
+            if (installSuccess) {
+                generic.logInstall("Installed " + pluginName + " version " + version + " in " + (System.currentTimeMillis () - startTime) + "ms\n\n");
+            } else {
+                generic.logInstall("ERROR IN INSTALLATION: " + errors + " error(s) when trying to install " + pluginName + " version " + version + "!");
+                generic.logInstall("Installation will continue as no critical errors were detected\n\n");
+            }
         }
+
+
         if (reloadPermissions) {
             Emulator.getGameEnvironment().getPermissionsManager().reload();
         }
         Emulator.getConfig().register("lux.version", version);
         Emulator.getConfig().update("lux.version", version);
-        load();
+        if (automaticNext) {
+            load(repairMode, true, "");
+        }
 
     }
 
-    public static void load() throws Exception  {
+    public static void load(boolean repairMode, boolean automaticNext, String startPosition) throws Exception  {
+        if (repairMode) {
+            if (startPosition.equalsIgnoreCase("rerun")) {
+                Emulator.getConfig().register("lux.version", "");
+                Emulator.getConfig().update("lux.version", "");
+            }
+        }
+
         if(Emulator.getConfig().getValue("lux.version").equals("") || Emulator.getConfig().getValue("lux.version") == null || Emulator.getConfig().getValue("lux.version").equalsIgnoreCase("1.2.0")) {
-            Registry.install("1.0.0");
+            Registry.install("1.0.0", repairMode, automaticNext);
         }
 
         if(Emulator.getConfig().getValue("lux.version").equals("1.0.0")) {
-            Registry.install("2.3.0");
+            Registry.install("2.3.0", repairMode, automaticNext);
         }
 
         if(Emulator.getConfig().getValue("lux.version").equals("2.3.0")) {
-            Registry.install("2.4.0");
+            Registry.install("2.4.0", repairMode, automaticNext);
         }
     }
 

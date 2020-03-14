@@ -20,7 +20,7 @@ public class Lux extends HabboPlugin implements EventListener {
     public static String pluginPrefix = "LUX";
     public static String pluginName = "Lux";
     public static String pluginAuthor = "Layne & Hackerman";
-    public static String version = "2.4.1";
+    public static String version = "2.4.2";
     public static int productId = 4;
     public static Lux INSTANCE = null;
 
@@ -57,7 +57,7 @@ public class Lux extends HabboPlugin implements EventListener {
             Emulator.getPluginManager().registerEvents(this, (EventListener) new loadEvents());
 
             // Loader
-            loadAll();
+            loadAll(false);
 
             System.out.println ( "[~] Loaded plugin " + pluginName + " " + version + " in " + (System.currentTimeMillis () - startTime) + "ms -> OK" );
         }

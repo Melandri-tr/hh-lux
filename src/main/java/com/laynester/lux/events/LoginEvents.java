@@ -9,6 +9,7 @@ import com.eu.habbo.messages.outgoing.inventory.InventoryRefreshComposer;
 import com.eu.habbo.plugin.EventHandler;
 import com.eu.habbo.plugin.EventListener;
 import com.eu.habbo.plugin.events.users.UserLoginEvent;
+import com.laynester.lux.hhcore.log.generic;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -69,10 +70,20 @@ public class LoginEvents implements EventListener {
                             Random r= new Random();
                             int randomNumber = r.nextInt(giftID.length);
                             Item baseItem = Emulator.getGameEnvironment().getItemManager().getItem(randomNumber);
-
+                            if (baseItem == null) {
+                                generic.logAlert("Item " + randomNumber + " doesn't exist. [1]");
+                                return;
+                            }
                             HabboItem item = Emulator.getGameEnvironment().getItemManager().createItem(0, baseItem, 0, 0, "");
-
+                            if (item == null) {
+                                generic.logAlert("Item " + randomNumber + " doesn't exist. [2]");
+                                return;
+                            }
                             Item giftItem = Emulator.getGameEnvironment().getItemManager().getItem((Integer)Emulator.getGameEnvironment().getCatalogManager().giftFurnis.values().toArray()[Emulator.getRandom().nextInt(Emulator.getGameEnvironment().getCatalogManager().giftFurnis.size())]);
+                            if (giftItem == null) {
+                                generic.logAlert("Item " + randomNumber + " doesn't exist. [3]");
+                                return;
+                            }
 
                             String extraData = "1\t" + item.getId();
                             extraData = extraData + "\t0\t0\t0\t"+Emulator.getTexts().getValue("lux.daily.gift")+"\t0\t0";

@@ -27,7 +27,7 @@ public class UserTalk implements EventListener {
                     event.habbo.whisper(Emulator.getTexts().getValue("lux.error.wait"), RoomChatMessageBubbles.ALERT);
                     return;
                 }
-            setRechargeNow(event.habbo, "mention", 5000);
+            setRechargeNow(event.habbo, "mention", 6000);
 
             {
                 THashMap<String, String> notify_keys = new THashMap<String, String>();

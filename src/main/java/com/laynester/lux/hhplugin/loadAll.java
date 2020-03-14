@@ -7,8 +7,8 @@ import com.laynester.lux.hhplugin.load.loadPlayerCommands;
 import com.laynester.lux.hhplugin.load.loadThreads;
 
 public class loadAll {
-    public static void loadAll() throws Exception {
-        Registry.load();
+    public static void loadAll(boolean repairMode) throws Exception {
+        Registry.load(repairMode, true, "");
         loadEvents.loadEvents();
         loadPlayerCommands.loadPlayerCommands();
         loadConsoleCommands.loadConsoleCommands();

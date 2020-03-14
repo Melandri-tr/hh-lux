@@ -12,4 +12,7 @@ public class generic {
     public static void logCore(String message) {
         System.out.println("[~] [" + pluginPrefix + "] [HH] " + message);
     }
+    public static void logAlert(String message) {
+        System.out.println("[!] [" + pluginPrefix + "] " + message);
+    }
 }

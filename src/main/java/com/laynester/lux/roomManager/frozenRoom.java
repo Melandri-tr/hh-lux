@@ -7,6 +7,8 @@ import com.eu.habbo.messages.outgoing.generic.alerts.BubbleAlertComposer;
 import com.eu.habbo.plugin.EventHandler;
 import com.eu.habbo.plugin.EventListener;
 import com.eu.habbo.plugin.events.furniture.*;
+import com.laynester.lux.hhcore.log.debug;
+import com.laynester.lux.hhcore.log.generic;
 import gnu.trove.map.hash.THashMap;
 
 public class frozenRoom implements EventListener {
@@ -42,6 +44,12 @@ public class frozenRoom implements EventListener {
     @EventHandler
     public static void frozenRoomFurniPickup(final FurniturePickedUpEvent event)
     {
+        // This is 2.4.1 Hotfix-1
+        // TODO: Investigate and remove this when fixed
+        if (event.habbo == null) {
+            generic.logAlert("(!) Habbo is null for frozenRoom.FurniturePickedUpEvent. Please tell Hackerman about it and provide logs and what interaction caused this! Thanks.");
+            return;
+        }
         if (event.habbo.getHabboStats().cache.get("isRoomFrozen") != null) {
             event.setCancelled(true);
             frozenAlert(event.habbo);

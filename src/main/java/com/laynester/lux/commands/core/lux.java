@@ -25,7 +25,6 @@ public class lux extends Command
         message = message + "- Close Dice Command\n";
         message = message + "- Roll Dice Command\n";
         message = message + "- Casino Command\n";
-        message = message + "- Discord Logging\n";
         message = message + "\r\nMore plugins can be found on <b>Hackerman.tech</b>";
 
 
