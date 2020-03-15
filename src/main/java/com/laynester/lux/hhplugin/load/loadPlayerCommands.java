@@ -23,6 +23,7 @@ public class loadPlayerCommands {
             CommandHandler.addCommand(new brb("cmd_brb",Emulator.getTexts().getValue("lux.cmd_brb.keys").split(";")));
             CommandHandler.addCommand(new disableeffects("cmd_disableeffects",Emulator.getTexts().getValue("lux.cmd_disableeffects.keys").split(";")));
             CommandHandler.addCommand(new buildheight("cmd_buildheight",Emulator.getTexts().getValue("lux.cmd_buildheight.keys").split(";")));
+            CommandHandler.addCommand(new setstate("cmd_setstate",Emulator.getTexts().getValue("lux.cmd_setstate.keys").split(";")));
             CommandHandler.addCommand(new welcome("cmd_welcome",Emulator.getTexts().getValue("lux.cmd_welcome.keys").split(";")));
             CommandHandler.addCommand(new pay("cmd_pay",Emulator.getTexts().getValue("lux.cmd_pay.keys").split(";")));
             CommandHandler.addCommand(new freezeroom("cmd_freezeroom",Emulator.getTexts().getValue("lux.cmd_freezeroom.keys").split(";")));

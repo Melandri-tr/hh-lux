@@ -178,6 +178,14 @@ public class Registry {
             reloadPermissions = registerPermission("cmd_buildheight", "'0', '1', '2'", "1", reloadPermissions);
             System.out.println("              -> Settings for `Build Height` -> OK");
 
+            Emulator.getTexts().register("commands.description.cmd_setstate", ":ss");
+            Emulator.getTexts().register("lux.cmd_setstate.keys","ss");
+            Emulator.getTexts().register("lux.cmd_setstate.changed", "Changed state to %extra_data%");
+            Emulator.getTexts().register("lux.cmd_setstate.disabled", "state removed.");
+            Emulator.getTexts().register("lux.cmd_setstate.not_specified", "No state set. state must be between 0 - 40.");
+            reloadPermissions = registerPermission("cmd_setstate", "'0', '1', '2'", "1", reloadPermissions);
+            System.out.println("              -> Settings for `cmd_setstate` -> OK");
+
             Emulator.getTexts().register("commands.description.cmd_welcome", ":welcome <username>");
             Emulator.getTexts().register("lux.cmd_welcome.keys", "welcome;willkommen;welkom;bienvenue;bienvenida;bem-vindo");
             Emulator.getTexts().register("lux.cmd_welcome.text", "Welcome %username% to %hotelname%;Enjoy your stay in %hotelname% %username%!");
