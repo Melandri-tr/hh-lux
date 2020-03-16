@@ -8,6 +8,7 @@ import com.laynester.lux.hhcore.log.error;
 import com.laynester.lux.hhcore.log.generic;
 import com.laynester.lux.roomManager.buildHeight;
 import com.laynester.lux.roomManager.frozenRoom;
+import com.laynester.lux.roomManager.setState;
 
 public class loadEvents implements EventListener {
     public static void loadEvents() {
@@ -23,6 +24,7 @@ public class loadEvents implements EventListener {
             // Room Manager
             Emulator.getPluginManager().registerEvents(Lux.INSTANCE, new frozenRoom());
             Emulator.getPluginManager().registerEvents(Lux.INSTANCE, new buildHeight());
+            Emulator.getPluginManager().registerEvents(Lux.INSTANCE, new setState());
             // Emulator.getPluginManager().registerEvents(Lux.INSTANCE, new brb());
 
             generic.logMessage("Event Manager -> " + (System.currentTimeMillis () - startTimeModuleCommandManager) + "ms -> OK");
