@@ -31,7 +31,7 @@ public class buildheight extends Command implements EventListener
             {
             }
 
-            if(height > 40 || height < 0) {
+            if(height > 100 || height < 0) {
                 gameClient.getHabbo().whisper(Emulator.getTexts().getValue("lux.cmd_buildheight.invalid_height"));
                 return true;
             }
